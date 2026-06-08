@@ -1,0 +1,66 @@
+services:
+  - type: web
+    name: campusfix-kelompok-api
+    runtime: docker
+    rootDir: backend/campusfix-api
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: APP_NAME
+        value: CampusFix
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        sync: false
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        value: https://campusfix-kelompok-api.onrender.com
+      - key: APP_LOCALE
+        value: id
+      - key: APP_FALLBACK_LOCALE
+        value: en
+      - key: APP_FAKER_LOCALE
+        value: id_ID
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: LOG_LEVEL
+        value: info
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: campusfix-kelompok-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: campusfix-kelompok-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: campusfix-kelompok-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: campusfix-kelompok-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: campusfix-kelompok-db
+          property: password
+      - key: DB_SSLMODE
+        value: require
+      - key: SESSION_DRIVER
+        value: database
+      - key: QUEUE_CONNECTION
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: BROADCAST_CONNECTION
+        value: log
+      - key: FILESYSTEM_DISK
+        value: local
+
+databases:
+  - name: campusfix-kelompok-db
+    plan: free
