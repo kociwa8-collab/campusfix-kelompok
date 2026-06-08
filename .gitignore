@@ -2,6 +2,7 @@
 .env.*
 !.env.example
 !.env.render.example
+!.env.railway.example
 
 backend/campusfix-api/vendor/
 backend/campusfix-api/node_modules/
