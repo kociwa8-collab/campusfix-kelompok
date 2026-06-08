@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+!.env.render.example
+
+backend/campusfix-api/vendor/
+backend/campusfix-api/node_modules/
+backend/campusfix-api/.git-backup/
+backend/campusfix-api/database/database.sqlite
+backend/campusfix-api/public/uploads/*
+!backend/campusfix-api/public/uploads/.gitkeep
+
+node_modules/
+.vscode/
+.DS_Store
+Thumbs.db

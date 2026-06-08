@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusFix - Sistem Pelaporan Fasilitas Kampus</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <nav class="navbar-campus">
+        <div class="brand">CampusFix</div>
+        <div class="navbar-campus-right">
+            <a href="#beranda" class="nav-link-campus">Beranda</a>
+            <a href="#fitur" class="nav-link-campus">Fitur</a>
+            <a href="#alur" class="nav-link-campus">Alur</a>
+            <a href="#kontak" class="nav-link-campus">Kontak</a>
+            <button type="button" class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">Mode</button>
+        </div>
+    </nav>
+
+    <section class="landing-page landing-hero" id="beranda">
+        <div class="landing-container">
+            <div class="landing-logo">CF</div>
+
+            <h1 class="landing-title">CampusFix</h1>
+
+            <p class="landing-subtitle">
+                Platform pelaporan fasilitas kampus yang modern, efisien, dan responsif.
+            </p>
+
+            <p class="landing-copy">
+                Laporkan kerusakan fasilitas kampus dengan mudah, pantau status perbaikan secara real-time,
+                dan bantu menciptakan lingkungan kampus yang lebih nyaman.
+            </p>
+
+            <div class="landing-buttons">
+                <a href="login.html" class="btn btn-primary">Masuk ke Aplikasi</a>
+                <a href="register.html" class="btn btn-outline-success">Daftar Mahasiswa</a>
+            </div>
+        </div>
+    </section>
+
+    <main class="landing-content">
+        <section class="landing-section" id="fitur">
+            <div class="section-heading">
+                <span class="section-kicker">Fitur Utama</span>
+                <h2>Semua proses laporan kampus dibuat lebih jelas.</h2>
+                <p>Mahasiswa membuat laporan, admin memantau, dan status perbaikan tetap terlihat.</p>
+            </div>
+
+            <div class="feature-grid">
+                <a href="register.html" class="feature-card">
+                    <span class="feature-icon">01</span>
+                    <h3>Buat Laporan</h3>
+                    <p>Kirim lokasi, kategori, deskripsi, dan foto bukti fasilitas yang bermasalah.</p>
+                </a>
+
+                <a href="login.html" class="feature-card">
+                    <span class="feature-icon">02</span>
+                    <h3>Pantau Status</h3>
+                    <p>Lihat perkembangan laporan dari menunggu verifikasi, diproses, sampai selesai.</p>
+                </a>
+
+                <a href="login.html" class="feature-card">
+                    <span class="feature-icon">03</span>
+                    <h3>Dashboard Admin</h3>
+                    <p>Admin dapat melihat semua laporan, mencari data, memfilter status, dan mengubah progres.</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="landing-section landing-band" id="alur">
+            <div class="section-heading">
+                <span class="section-kicker">Alur Kerja</span>
+                <h2>Dari laporan masuk sampai ditangani.</h2>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-item">
+                    <strong>1</strong>
+                    <h3>Mahasiswa mengirim laporan</h3>
+                    <p>Data laporan tersimpan ke sistem dan muncul di riwayat mahasiswa.</p>
+                </div>
+
+                <div class="step-item">
+                    <strong>2</strong>
+                    <h3>Admin memverifikasi</h3>
+                    <p>Admin melihat laporan masuk di dashboard dan mulai proses penanganan.</p>
+                </div>
+
+                <div class="step-item">
+                    <strong>3</strong>
+                    <h3>Status diperbarui</h3>
+                    <p>Mahasiswa bisa memantau perubahan status laporan secara transparan.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="landing-section contact-section" id="kontak">
+            <div>
+                <span class="section-kicker">Mulai Sekarang</span>
+                <h2>Siap bantu fasilitas kampus jadi lebih tertata?</h2>
+                <p>Masuk jika sudah punya akun, atau daftar sebagai mahasiswa untuk membuat laporan pertama.</p>
+            </div>
+
+            <div class="landing-buttons compact">
+                <a href="login.html" class="btn btn-primary">Masuk</a>
+                <a href="register.html" class="btn btn-success">Daftar</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/theme.js"></script>
+</body>
+</html>

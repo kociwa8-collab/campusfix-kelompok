@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Mahasiswa - CampusFix</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/chatbot.css">
+</head>
+<body class="student-dashboard-page">
+    <nav class="student-topbar">
+        <div class="student-brand">
+            <div class="student-brand-mark">CF</div>
+            <div>
+                <div class="student-brand-name">CampusFix</div>
+                <div class="student-brand-campus">UMSU Medan - Lantai 2 GKB</div>
+            </div>
+        </div>
+
+        <div class="student-nav-actions">
+            <div class="student-user-chip" id="userInfo"></div>
+
+            <button
+                type="button"
+                class="student-icon-btn"
+                onclick="focusStudentNotification()"
+                title="Notifikasi">
+                <span class="notification-dot" id="studentNotificationBadge" style="display: none;">!</span>
+                &#128276;
+            </button>
+
+            <button
+                type="button"
+                class="student-icon-btn theme-toggle"
+                onclick="toggleTheme()"
+                title="Toggle Dark/Light Mode">
+                Mode
+            </button>
+
+            <button
+                type="button"
+                class="student-icon-btn"
+                onclick="logout()"
+                title="Keluar">
+                Out
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-primary student-report-btn"
+                onclick="openReportForm()">
+                + Lapor Kerusakan
+            </button>
+        </div>
+    </nav>
+
+    <main class="student-dashboard-shell">
+        <section class="student-room-card">
+            <div class="student-room-icon">GKB</div>
+            <div>
+                <span class="mini-badge">GKB-201</span>
+                <h1>Ruang Kelas Teori GKB-201 UMSU</h1>
+                <p>
+                    Pilih tombol lapor kerusakan untuk mengirim laporan fasilitas, lalu pantau statusnya
+                    melalui timeline aktivitas di bawah.
+                </p>
+                <button type="button" class="student-link-btn" onclick="openReportForm()">
+                    Isi laporan kerusakan untuk ruangan ini ->
+                </button>
+            </div>
+        </section>
+
+        <div id="studentNotification" class="notification-panel student-notification-panel" style="display: none;"></div>
+
+        <section class="student-timeline-card">
+            <div class="student-section-heading">
+                <div class="student-section-icon">T</div>
+                <div>
+                    <h2>Timeline & Aktivitas Terkini</h2>
+                    <p>Log laporan milik Anda dan proses perbaikannya</p>
+                </div>
+            </div>
+
+            <div class="student-timeline-scroll">
+                <div id="ownTimelineList" class="student-timeline-list"></div>
+                <div id="ownTimelineEmpty" class="empty-state compact-empty" style="display: none;">
+                    <h3>Belum ada aktivitas</h3>
+                    <p>Laporan yang Anda buat akan muncul di timeline ini.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="riwayatLaporan" class="student-public-section">
+            <div class="student-section-heading">
+                <div class="student-section-icon">L</div>
+                <div>
+                    <h2>Laporan Mahasiswa</h2>
+                    <p>Laporan publik yang bisa diberi like untuk menunjukkan dampaknya ke pembelajaran</p>
+                </div>
+            </div>
+
+            <div id="reportList" class="report-list student-public-list"></div>
+
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <h3>Belum ada laporan</h3>
+                <p>Daftar laporan mahasiswa akan muncul di sini.</p>
+            </div>
+        </section>
+    </main>
+
+    <div id="reportFormOverlay" class="report-form-overlay" style="display: none;">
+        <section class="form-section report-form-modal" id="formLaporan">
+            <div class="modal-form-header">
+                <div>
+                    <h3>Buat Laporan Baru</h3>
+                    <p>Kirim detail fasilitas yang rusak agar admin bisa segera memproses.</p>
+                </div>
+                <button type="button" class="student-icon-btn" onclick="closeReportForm()" title="Tutup">
+                    X
+                </button>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Lokasi Fasilitas</label>
+                <input
+                    type="text"
+                    id="location"
+                    placeholder="Contoh: Gedung A, Ruang 101"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Kategori Masalah</label>
+                <input
+                    type="text"
+                    id="category"
+                    placeholder="Contoh: AC bocor, kursi rusak, lampu mati"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Deskripsi Detail</label>
+                <textarea
+                    id="description"
+                    placeholder="Jelaskan masalah secara detail agar tim perbaikan dapat menangani dengan tepat"
+                    required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="photo">Foto Bukti (Opsional)</label>
+                <input
+                    type="file"
+                    id="photo"
+                    accept="image/*">
+                <small style="color: var(--gray-600);">Format: JPG, PNG (Max 5MB)</small>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-primary" onclick="submitReport()">
+                    Kirim Laporan
+                </button>
+                <button type="button" class="btn btn-outline-success" onclick="closeReportForm()">
+                    Batal
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/mahasiswa.js"></script>
+    <script src="../js/chatbot.js"></script>
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Chatbot - CampusFix</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .test-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .test-status {
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .status-ok {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status-loading {
+            background: #e7d4f5;
+            color: #663399;
+            border: 1px solid #d0a2e8;
+        }
+        
+        .btn-test {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
+        .btn-test:hover {
+            background: #5568d3;
+        }
+        
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+        
+        .log {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 CampusFix Chatbot - Test Console</h1>
+        
+        <div class="info-box">
+            <strong>ℹ️ Informasi:</strong> Halaman ini untuk testing chatbot. Pastikan Laravel server sudah berjalan di <code>http://localhost:8000</code>
+        </div>
+
+        <!-- API Status Check -->
+        <div class="test-section">
+            <div class="test-title">🔌 Backend API Status</div>
+            <p>Cek koneksi ke Laravel server</p>
+            <button type="button" class="btn-test" onclick="checkApiStatus()">Test API Connection</button>
+            <div id="api-status" class="test-status"></div>
+            <div id="api-log" class="log" style="display:none;"></div>
+        </div>
+
+        <!-- LocalStorage Check -->
+        <div class="test-section">
+            <div class="test-title">💾 LocalStorage Check</div>
+            <p>Cek data yang tersimpan di browser</p>
+            <button type="button" class="btn-test" onclick="checkLocalStorage()">Check LocalStorage</button>
+            <div id="storage-status" class="test-status"></div>
+            <div id="storage-log" class="log" style="display:none;"></div>
+        </div>
+
+        <!-- Chatbot Widget Check -->
+        <div class="test-section">
+            <div class="test-title">🤖 Chatbot Widget Status</div>
+            <p>Cek apakah chatbot widget sudah loaded</p>
+            <button type="button" class="btn-test" onclick="checkChatbot()">Check Chatbot</button>
+            <div id="chatbot-status" class="test-status"></div>
+            <div id="chatbot-log" class="log" style="display:none;"></div>
+        </div>
+
+        <!-- Send Test Message -->
+        <div class="test-section">
+            <div class="test-title">💬 Send Test Message</div>
+            <p>Kirim test message ke chatbot</p>
+            <button type="button" class="btn-test" onclick="sendTestMessage()">Send "Halo"</button>
+            <div id="message-status" class="test-status"></div>
+            <div id="message-log" class="log" style="display:none;"></div>
+        </div>
+
+        <!-- Full Test -->
+        <div class="test-section">
+            <div class="test-title">✅ Full System Test</div>
+            <p>Test semua komponen sekaligus</p>
+            <button type="button" class="btn-test" onclick="fullSystemTest()">Run Full Test</button>
+            <div id="full-status" class="test-status"></div>
+            <div id="full-log" class="log" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script src="../css/chatbot.css" disabled></script>
+    <script src="../js/chatbot.js"></script>
+
+    <script>
+        function log(elementId, message, isError = false) {
+            const logEl = document.getElementById(elementId);
+            if (logEl) {
+                const time = new Date().toLocaleTimeString();
+                logEl.textContent += `[${time}] ${message}\n`;
+                logEl.scrollTop = logEl.scrollHeight;
+                logEl.parentElement.style.display = 'block';
+            }
+            console.log(message);
+        }
+
+        function setStatus(elementId, message, isError = false) {
+            const statusEl = document.getElementById(elementId);
+            if (statusEl) {
+                statusEl.textContent = message;
+                statusEl.className = `test-status ${isError ? 'status-error' : 'status-ok'}`;
+            }
+        }
+
+        async function checkApiStatus() {
+            const statusId = 'api-status';
+            const logId = 'api-log';
+            
+            setStatus(statusId, '⏳ Checking...', false);
+            log(logId, 'Checking API connection to http://localhost:8000/api/chat/faqs');
+
+            try {
+                const response = await fetch('http://localhost:8000/api/chat/faqs', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    timeout: 5000
+                });
+
+                log(logId, `Response Status: ${response.status}`);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    log(logId, `✅ Server merespons dengan baik`);
+                    log(logId, `✅ FAQs loaded: ${Object.keys(data.faqs || {}).length} categories`);
+                    setStatus(statusId, '✅ API Connection OK');
+                } else {
+                    log(logId, `❌ Server error: ${response.status}`);
+                    setStatus(statusId, `❌ API Error: ${response.status}`, true);
+                }
+            } catch (error) {
+                log(logId, `❌ Connection Error: ${error.message}`);
+                setStatus(statusId, `❌ Cannot connect to server`, true);
+            }
+        }
+
+        function checkLocalStorage() {
+            const statusId = 'storage-status';
+            const logId = 'storage-log';
+
+            try {
+                log(logId, 'Checking localStorage data...');
+                
+                const sessionId = localStorage.getItem('chatbot_session_id');
+                const user = localStorage.getItem('user');
+
+                if (sessionId) {
+                    log(logId, `✅ Session ID: ${sessionId.substring(0, 10)}...`);
+                } else {
+                    log(logId, `⚠️ No Session ID (will be created on first chat)`);
+                }
+
+                if (user) {
+                    log(logId, `✅ User data found: ${JSON.parse(user).name}`);
+                } else {
+                    log(logId, `⚠️ No user data (need to login first)`);
+                }
+
+                setStatus(statusId, '✅ LocalStorage OK');
+            } catch (error) {
+                log(logId, `❌ Error: ${error.message}`);
+                setStatus(statusId, `❌ LocalStorage Error`, true);
+            }
+        }
+
+        function checkChatbot() {
+            const statusId = 'chatbot-status';
+            const logId = 'chatbot-log';
+
+            try {
+                log(logId, 'Checking chatbot widget...');
+
+                if (window.chatbot) {
+                    log(logId, `✅ Chatbot instance found`);
+                    log(logId, `✅ API Base URL: ${window.chatbot.apiBaseUrl}`);
+                    log(logId, `✅ Session ID: ${window.chatbot.sessionId.substring(0, 10)}...`);
+                    
+                    if (window.chatbot.container) {
+                        log(logId, `✅ Widget container loaded`);
+                    }
+                    
+                    if (window.chatbot.floatingBtn) {
+                        log(logId, `✅ Floating button loaded`);
+                    }
+
+                    setStatus(statusId, '✅ Chatbot OK');
+                } else {
+                    log(logId, `❌ Chatbot not initialized`);
+                    setStatus(statusId, `❌ Chatbot not found`, true);
+                }
+            } catch (error) {
+                log(logId, `❌ Error: ${error.message}`);
+                setStatus(statusId, `❌ Chatbot Check Error`, true);
+            }
+        }
+
+        async function sendTestMessage() {
+            const statusId = 'message-status';
+            const logId = 'message-log';
+
+            setStatus(statusId, '⏳ Sending...', false);
+            log(logId, 'Sending test message "Halo" to chatbot API...');
+
+            try {
+                const response = await fetch('http://localhost:8000/api/chat/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Halo',
+                        session_id: window.chatbot?.sessionId || 'test-session'
+                    }),
+                    timeout: 5000
+                });
+
+                log(logId, `Response Status: ${response.status}`);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        log(logId, `✅ Bot response received`);
+                        log(logId, `✅ Response: "${data.message.substring(0, 50)}..."`);
+                        setStatus(statusId, '✅ Message Sent OK');
+                    } else {
+                        log(logId, `❌ API returned error: ${data.message}`);
+                        setStatus(statusId, '❌ API Error', true);
+                    }
+                } else {
+                    log(logId, `❌ Server error: ${response.status}`);
+                    setStatus(statusId, `❌ Server Error: ${response.status}`, true);
+                }
+            } catch (error) {
+                log(logId, `❌ Error: ${error.message}`);
+                setStatus(statusId, `❌ Request Error`, true);
+            }
+        }
+
+        async function fullSystemTest() {
+            const statusId = 'full-status';
+            const logId = 'full-log';
+
+            setStatus(statusId, '⏳ Testing...', false);
+            log(logId, '========== FULL SYSTEM TEST ==========');
+
+            // Test 1: API
+            log(logId, '\n[1/4] Testing API Connection...');
+            try {
+                const res1 = await fetch('http://localhost:8000/api/chat/faqs');
+                if (res1.ok) {
+                    log(logId, '✅ API Connection: OK');
+                } else {
+                    throw new Error(`API returned ${res1.status}`);
+                }
+            } catch (e) {
+                log(logId, `❌ API Connection: FAILED - ${e.message}`);
+            }
+
+            // Test 2: LocalStorage
+            log(logId, '\n[2/4] Checking LocalStorage...');
+            if (localStorage.getItem('chatbot_session_id')) {
+                log(logId, '✅ LocalStorage: OK');
+            } else {
+                log(logId, '⚠️ LocalStorage: Created new session');
+            }
+
+            // Test 3: Chatbot Widget
+            log(logId, '\n[3/4] Checking Chatbot Widget...');
+            if (window.chatbot) {
+                log(logId, '✅ Chatbot Widget: OK');
+            } else {
+                log(logId, '❌ Chatbot Widget: NOT FOUND');
+            }
+
+            // Test 4: Send Message
+            log(logId, '\n[4/4] Testing Message Send...');
+            try {
+                const res = await fetch('http://localhost:8000/api/chat/send', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Test',
+                        session_id: window.chatbot?.sessionId || 'test'
+                    }),
+                    timeout: 5000
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.success) {
+                        log(logId, '✅ Message Send: OK');
+                    } else {
+                        log(logId, '❌ Message Send: API Error');
+                    }
+                } else {
+                    log(logId, `❌ Message Send: HTTP ${res.status}`);
+                }
+            } catch (e) {
+                log(logId, `❌ Message Send: ${e.message}`);
+            }
+
+            log(logId, '\n========== TEST COMPLETE ==========');
+            setStatus(statusId, '✅ Test Complete - Check logs above');
+        }
+
+        // Auto run on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                log('api-log', 'Page loaded. You can now run tests.');
+                log('api-log', 'Make sure to start Laravel server: php artisan serve');
+            }, 500);
+        });
+    </script>
+
+    <script src="../js/config.js"></script>
+
+
+</body>
+</html>

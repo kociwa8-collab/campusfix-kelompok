@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CampusFix</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="login-page">
+    <!-- Navbar -->
+    <nav class="navbar-campus" style="position: fixed; top: 0; left: 0; right: 0; z-index: 100;">
+        <div class="brand">CampusFix</div>
+        <div class="navbar-campus-right">
+            <button type="button" class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">☀️</button>
+        </div>
+    </nav>
+
+    <div class="login-split" style="margin-top: 70px;">
+        <!-- Brand Section -->
+        <div class="login-brand-section">
+            <div class="login-brand-content">
+                <span class="login-brand-icon">🏫</span>
+                <h1 class="login-brand-title">CampusFix</h1>
+                <p class="login-brand-subtitle">
+                    Platform pelaporan fasilitas kampus yang dirancang untuk memudahkan komunikasi antara mahasiswa dan pihak manajemen kampus dalam melaporkan kerusakan atau masalah fasilitas.
+                </p>
+
+                <div class="campus-map-card">
+                    <h3>Lokasi Kampus</h3>
+                    <p>Kampus yang menggunakan layanan CampusFix</p>
+                    <iframe
+                        title="Lokasi kampus CampusFix"
+                        src="https://www.google.com/maps?q=Universitas%20Muhammadiyah%20Sumatera%20Utara%403.614433526992798,98.6754150390625&z=17&output=embed"
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <a
+                        class="campus-map-link"
+                        href="https://www.google.com/maps?q=Universitas%20Muhammadiyah%20Sumatera%20Utara%403.614433526992798,98.6754150390625"
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        Buka lokasi kampus
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="login-form-section">
+            <div class="login-card">
+                <h2 class="title">Masuk</h2>
+                <p class="subtitle">Selamat datang kembali di CampusFix</p>
+
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input 
+                            type="email" 
+                            id="email"
+                            placeholder="Masukkan email Anda"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input 
+                            type="password" 
+                            id="password"
+                            placeholder="Masukkan password Anda"
+                            required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Masuk
+                    </button>
+                </form>
+
+                <div class="login-divider">
+                    atau
+                </div>
+
+                <a href="register.html" class="btn btn-outline-success w-100">
+                    Buat Akun Baru
+                </a>
+
+                <div class="login-footer">
+                    <p>Belum punya akun? 
+                        <a href="register.html">Daftar di sini</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../js/config.js"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/login.js"></script>
+</body>
+</html>

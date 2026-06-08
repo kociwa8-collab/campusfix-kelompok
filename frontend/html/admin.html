@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - CampusFix</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="student-dashboard-page admin-dashboard-page">
+    <div id="imageModal" class="image-modal">
+        <span class="close-btn" onclick="closeImage()">X</span>
+        <img id="modalImage" class="modal-image" alt="Preview Laporan">
+    </div>
+
+    <nav class="student-topbar admin-topbar">
+        <div class="student-brand">
+            <div class="student-brand-mark">CF</div>
+            <div>
+                <div class="student-brand-name">CampusFix Admin</div>
+                <div class="student-brand-campus">UMSU Medan - Panel Pengelola</div>
+            </div>
+        </div>
+
+        <div class="admin-top-menu">
+            <button type="button" class="sidebar-menu-item active" id="menuDashboard" onclick="showDashboard()">
+                Dashboard
+            </button>
+            <button type="button" class="sidebar-menu-item" id="menuAll" onclick="filterReports('all')">
+                Semua Laporan
+            </button>
+            <button type="button" class="sidebar-menu-item" id="menuPending" onclick="filterReports('Menunggu Verifikasi')">
+                Menunggu
+            </button>
+            <button type="button" class="sidebar-menu-item" id="menuProcessing" onclick="filterReports('Diproses')">
+                Diproses
+            </button>
+            <button type="button" class="sidebar-menu-item" id="menuCompleted" onclick="filterReports('Selesai')">
+                Selesai
+            </button>
+            <button type="button" class="sidebar-menu-item" id="menuSettings" onclick="showSettings()">
+                Pengaturan
+            </button>
+        </div>
+
+        <div class="student-nav-actions">
+            <div class="student-user-chip" id="userInfo"></div>
+
+            <button
+                type="button"
+                class="student-icon-btn"
+                onclick="focusAdminNotification()"
+                title="Notifikasi">
+                <span class="notification-dot" id="adminNotificationBadge" style="display: none;">!</span>
+                &#128276;
+            </button>
+
+            <button type="button" class="student-icon-btn theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+                Mode
+            </button>
+
+            <button type="button" class="student-icon-btn" onclick="logout()" title="Keluar">
+                Out
+            </button>
+        </div>
+    </nav>
+
+    <main class="student-dashboard-shell admin-dashboard-shell">
+        <div id="adminNotification" class="notification-panel notification-panel-admin" style="display: none;"></div>
+
+        <div class="stat-grid" id="dashboardSection">
+            <div class="stat-box">
+                <h5>Total Laporan</h5>
+                <h2 id="totalReport">0</h2>
+            </div>
+
+            <div class="stat-box">
+                <h5>Sedang Diproses</h5>
+                <h2 id="processReport">0</h2>
+            </div>
+
+            <div class="stat-box">
+                <h5>Selesai</h5>
+                <h2 id="doneReport">0</h2>
+            </div>
+        </div>
+
+        <div id="searchFilterBar" class="search-filter-bar admin-filter-card">
+            <div class="search-box">
+                <input type="text" id="adminSearchInput" placeholder="Cari laporan...">
+            </div>
+            <select id="adminStatusFilter" class="filter-select form-control">
+                <option value="all">Semua Status</option>
+                <option value="Menunggu Verifikasi">Menunggu</option>
+                <option value="Diproses">Diproses</option>
+                <option value="Selesai">Selesai</option>
+            </select>
+        </div>
+
+        <div id="reportsSection" class="student-public-section admin-report-section">
+            <div class="student-section-heading">
+                <div class="student-section-icon">A</div>
+                <div>
+                    <h2>Daftar Laporan</h2>
+                    <p>Laporan mahasiswa dan dampaknya ke fasilitas pembelajaran</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="reportList" class="report-list student-public-list admin-report-list"></div>
+
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <h3>Belum ada laporan</h3>
+            <p>Semua laporan mahasiswa akan muncul di sini.</p>
+        </div>
+
+        <div id="settingsSection" class="admin-settings-section" style="display: none;">
+            <div class="student-section-heading">
+                <div class="student-section-icon">S</div>
+                <div>
+                    <h2>Pengaturan Sistem</h2>
+                    <p>Profil admin, keamanan, dan informasi sistem</p>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4>Profil Admin</h4>
+
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="adminName" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="adminEmail" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Role</label>
+                    <input type="text" id="adminRole" readonly value="Administrator">
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4>Keamanan</h4>
+
+                <div class="form-group">
+                    <label>Password Lama</label>
+                    <input type="password" id="oldPassword" placeholder="Masukkan password lama">
+                </div>
+
+                <div class="form-group">
+                    <label>Password Baru</label>
+                    <input type="password" id="newPassword" placeholder="Masukkan password baru">
+                </div>
+
+                <div class="form-group">
+                    <label>Konfirmasi Password Baru</label>
+                    <input type="password" id="confirmPassword" placeholder="Konfirmasi password baru">
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="changePassword()">
+                    Simpan Password Baru
+                </button>
+            </div>
+
+            <div class="form-section">
+                <h4>Informasi Sistem</h4>
+
+                <div class="admin-info-grid">
+                    <div>
+                        <label>Versi Aplikasi</label>
+                        <p>v1.0.1</p>
+                    </div>
+                    <div>
+                        <label>Database</label>
+                        <p>SQLite</p>
+                    </div>
+                    <div>
+                        <label>Framework</label>
+                        <p>Laravel 12</p>
+                    </div>
+                    <div>
+                        <label>Status</label>
+                        <p>Production Ready</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4>Maintenance</h4>
+                <p>Pilihan maintenance untuk mengelola data sistem:</p>
+
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <button type="button" class="btn btn-primary" onclick="backupData()">
+                        Backup Data
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="clearCache()">
+                        Clear Cache
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4>Tentang CampusFix</h4>
+                <p>
+                    <strong>CampusFix</strong> adalah platform web modern untuk pelaporan dan manajemen
+                    fasilitas kampus. Sistem ini membantu mahasiswa menyampaikan laporan dan admin
+                    memprosesnya dengan lebih cepat.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+</html>
