@@ -3,6 +3,8 @@
 use Illuminate\Support\Str;
 use Pdo\Mysql;
 
+$envFilled = static fn (string $key, mixed $default = null): mixed => filled(env($key)) ? env($key) : $default;
+
 return [
 
     /*
@@ -86,12 +88,12 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => env('DATABASE_URL', env('DB_URL')),
-            'host' => env('PGHOST', env('DB_HOST', '127.0.0.1')),
-            'port' => env('PGPORT', env('DB_PORT', '5432')),
-            'database' => env('PGDATABASE', env('DB_DATABASE', 'laravel')),
-            'username' => env('PGUSER', env('DB_USERNAME', 'root')),
-            'password' => env('PGPASSWORD', env('DB_PASSWORD', '')),
+            'url' => $envFilled('DATABASE_URL', $envFilled('DATABASE_PRIVATE_URL', $envFilled('DATABASE_PUBLIC_URL', $envFilled('DB_URL')))),
+            'host' => $envFilled('PGHOST', $envFilled('POSTGRES_HOST', $envFilled('DB_HOST', '127.0.0.1'))),
+            'port' => $envFilled('PGPORT', $envFilled('POSTGRES_PORT', $envFilled('DB_PORT', '5432'))),
+            'database' => $envFilled('PGDATABASE', $envFilled('POSTGRES_DB', $envFilled('DB_DATABASE', 'laravel'))),
+            'username' => $envFilled('PGUSER', $envFilled('POSTGRES_USER', $envFilled('DB_USERNAME', 'root'))),
+            'password' => $envFilled('PGPASSWORD', $envFilled('POSTGRES_PASSWORD', $envFilled('DB_PASSWORD', ''))),
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
