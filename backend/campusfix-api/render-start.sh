@@ -3,6 +3,7 @@ set -e
 
 php artisan config:clear
 php artisan route:clear
+mkdir -p public/uploads
 php artisan migrate --force
 php artisan db:seed --force
 

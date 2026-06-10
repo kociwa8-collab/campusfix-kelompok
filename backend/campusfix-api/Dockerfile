@@ -19,7 +19,8 @@ RUN composer install --no-dev --prefer-dist --no-interaction --no-scripts --opti
 COPY . .
 
 RUN composer dump-autoload --optimize \
-    && chmod -R 775 storage bootstrap/cache
+    && mkdir -p public/uploads \
+    && chmod -R 775 storage bootstrap/cache public/uploads
 
 EXPOSE 10000
 

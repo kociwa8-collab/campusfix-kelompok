@@ -164,6 +164,7 @@ function displayReports(reports) {
         const reporterName = report.user?.name || 'Mahasiswa';
         const sentDate = formatDate(report.created_at);
         const likesCount = Number(report.likes_count || 0);
+        const photoUrl = getReportPhotoUrl(report);
 
         html += `
             <div class="report-item">
@@ -194,10 +195,10 @@ function displayReports(reports) {
                     </div>
                 </div>
 
-                ${report.photo ? `
+                ${photoUrl ? `
                     <div style="margin-top: 16px;">
                         <img
-                            src="${UPLOAD_BASE_URL}/${encodeURIComponent(report.photo)}"
+                            src="${escapeHtml(photoUrl)}"
                             class="report-image"
                             alt="Foto laporan"
                             onclick="openImage(this.src)"
@@ -540,6 +541,22 @@ function escapeHtml(value) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
+}
+
+function getReportPhotoUrl(report) {
+    if (report.photo_url) {
+        return report.photo_url;
+    }
+
+    if (!report.photo) {
+        return '';
+    }
+
+    if (/^https?:\/\//i.test(report.photo)) {
+        return report.photo;
+    }
+
+    return `${UPLOAD_BASE_URL}/${encodeURIComponent(report.photo)}`;
 }
 
 function getErrorMessage(data) {

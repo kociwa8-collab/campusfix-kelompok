@@ -298,11 +298,14 @@ function renderReports(reports) {
                     'OK';
             }
 
+            const photoUrl =
+                getReportPhotoUrl(report);
+
             const photoHtml =
-                report.photo
+                photoUrl
                     ? `
                         <img
-                            src="${UPLOAD_BASE_URL}/${encodeURIComponent(report.photo)}"
+                            src="${escapeHtml(photoUrl)}"
                             class="report-image"
                             alt="Foto laporan">
                     `
@@ -616,6 +619,22 @@ function escapeHtml(value) {
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#039;');
+}
+
+function getReportPhotoUrl(report) {
+    if (report.photo_url) {
+        return report.photo_url;
+    }
+
+    if (!report.photo) {
+        return '';
+    }
+
+    if (/^https?:\/\//i.test(report.photo)) {
+        return report.photo;
+    }
+
+    return `${UPLOAD_BASE_URL}/${encodeURIComponent(report.photo)}`;
 }
 
 function getErrorMessage(data) {

@@ -7,22 +7,28 @@ use App\Models\Report;
 
 class ReportController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(
+        $reports =
             Report::with('user:id,name,email')
                 ->latest()
-                ->get()
+                ->get();
+
+        return response()->json(
+            $this->withPhotoUrls($reports, $request)
         );
     }
 
-    public function myReports($userId)
+    public function myReports(Request $request, $userId)
     {
-       return response()->json(
+       $reports =
         Report::with('user:id,name,email')
             ->where('user_id', $userId)
             ->orderBy('created_at', 'desc')
-            ->get()
+            ->get();
+
+       return response()->json(
+        $this->withPhotoUrls($reports, $request)
     );
     }
 
@@ -39,12 +45,17 @@ class ReportController extends Controller
     $photoName = null;
 
      if ($request->hasFile('photo')) {
+    $uploadPath = public_path('uploads');
+
+    if (!is_dir($uploadPath)) {
+        mkdir($uploadPath, 0775, true);
+    }
 
     $photoName = time() . '_' . uniqid() . '.' .
         $request->photo->extension();
 
     $request->photo->move(
-        public_path('uploads'),
+        $uploadPath,
         $photoName
     );
     }
@@ -62,7 +73,7 @@ class ReportController extends Controller
 
     return response()->json([
         'message' => 'Laporan berhasil dikirim',
-        'data' => $report
+        'data' => $this->withPhotoUrl($report, $request)
     ]);
     }
 
@@ -134,7 +145,45 @@ class ReportController extends Controller
 
     return response()->json([
         'message' => $alreadyLiked ? 'Like laporan dibatalkan' : 'Laporan disukai',
-        'data' => $report->fresh('user:id,name,email')
+        'data' => $this->withPhotoUrl(
+            $report->fresh('user:id,name,email'),
+            $request
+        )
     ]);
+   }
+
+   private function withPhotoUrls($reports, Request $request)
+   {
+    return $reports->map(
+        fn (Report $report) => $this->withPhotoUrl($report, $request)
+    );
+   }
+
+   private function withPhotoUrl(Report $report, Request $request): Report
+   {
+    $report->photo_url = $report->photo
+        ? $this->uploadedPhotoUrl($request, $report->photo)
+        : null;
+
+    return $report;
+   }
+
+   private function uploadedPhotoUrl(Request $request, string $photo): string
+   {
+    $scheme = explode(
+        ',',
+        $request->headers->get('x-forwarded-proto', $request->getScheme())
+    )[0];
+
+    $host = explode(
+        ',',
+        $request->headers->get('x-forwarded-host', $request->getHttpHost())
+    )[0];
+
+    return trim($scheme) .
+        '://' .
+        trim($host) .
+        '/uploads/' .
+        rawurlencode(basename($photo));
    }
 }

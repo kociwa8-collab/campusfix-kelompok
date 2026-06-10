@@ -2,7 +2,7 @@ const LOCAL_API_BASE_URL =
     'http://127.0.0.1:8000/api';
 
 const PRODUCTION_API_BASE_URL =
-    'https://campusfix-kelompok-api-production.up.railway.app/api';
+    'https://campusfix-kelompok-api.onrender.com/api';
 
 const API_BASE_URL =
     window.CAMPUSFIX_API_BASE_URL ||
