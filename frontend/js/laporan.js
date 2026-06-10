@@ -6,7 +6,7 @@ async function submitReport(event) {
     const category = document.getElementById('category').value;
     const description = document.getElementById('description').value;
 
-    const response = await fetch('http://127.0.0.1:8000/api/reports', {
+    const response = await fetch(`${API_BASE_URL}/reports`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -27,7 +27,7 @@ async function submitReport(event) {
 
 async function loadReports() {
 
-    const response = await fetch('http://127.0.0.1:8000/api/reports');
+    const response = await fetch(`${API_BASE_URL}/reports`);
 
     const reports = await response.json();
 
@@ -68,7 +68,7 @@ loadReports();
 
 async function updateStatus(id, status) {
 
-    await fetch(`http://127.0.0.1:8000/api/reports/${id}`, {
+    await fetch(`${API_BASE_URL}/reports/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
