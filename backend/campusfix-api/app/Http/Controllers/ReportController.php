@@ -43,8 +43,10 @@ class ReportController extends Controller
     ]);
 
     $photoName = null;
+    $photoData = null;
 
      if ($request->hasFile('photo')) {
+    $uploadedPhoto = $request->file('photo');
     $uploadPath = public_path('uploads');
 
     if (!is_dir($uploadPath)) {
@@ -52,9 +54,14 @@ class ReportController extends Controller
     }
 
     $photoName = time() . '_' . uniqid() . '.' .
-        $request->photo->extension();
+        $uploadedPhoto->extension();
 
-    $request->photo->move(
+    $photoData = 'data:' .
+        $uploadedPhoto->getMimeType() .
+        ';base64,' .
+        base64_encode(file_get_contents($uploadedPhoto->getRealPath()));
+
+    $uploadedPhoto->move(
         $uploadPath,
         $photoName
     );
@@ -67,6 +74,7 @@ class ReportController extends Controller
     'description' => trim($request->description),
     'status' => 'Menunggu Verifikasi',
     'photo' => $photoName,
+    'photo_data' => $photoData,
     'likes_count' => 0,
     'liked_by' => []
     ]);
@@ -161,6 +169,12 @@ class ReportController extends Controller
 
    private function withPhotoUrl(Report $report, Request $request): Report
    {
+    if ($report->photo_data) {
+        $report->photo_url = $report->photo_data;
+
+        return $report;
+    }
+
     $report->photo_url = $report->photo
         ? $this->uploadedPhotoUrl($request, $report->photo)
         : null;

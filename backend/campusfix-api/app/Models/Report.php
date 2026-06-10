@@ -13,9 +13,14 @@ class Report extends Model
         'category',
         'description',
         'photo',
+        'photo_data',
         'status',
         'likes_count',
         'liked_by'
+    ];
+
+    protected $hidden = [
+        'photo_data',
     ];
 
     protected $casts = [
