@@ -4,6 +4,7 @@ use Illuminate\Support\Str;
 use Pdo\Mysql;
 
 $envFilled = static fn (string $key, mixed $default = null): mixed => filled(env($key)) ? env($key) : $default;
+$hasPostgresUrl = filled(env('DATABASE_URL')) || filled(env('DATABASE_PRIVATE_URL')) || filled(env('DATABASE_PUBLIC_URL'));
 
 return [
 
@@ -19,7 +20,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => $envFilled('DB_CONNECTION', $hasPostgresUrl ? 'pgsql' : 'sqlite'),
 
     /*
     |--------------------------------------------------------------------------
